@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp">
+
+    <!-- Usuario -->
+    <TextView
+        android:id="@+id/textUserId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="G"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:gravity="start|center_vertical" />
+
+    <!-- Recorrido (km) -->
+    <TextView
+        android:id="@+id/textDistance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="55 km"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:gravity="center" />
+
+    <!-- Precio -->
+    <TextView
+        android:id="@+id/textPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="$602"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:gravity="center" />
+
+    <!-- Fecha -->
+    <TextView
+        android:id="@+id/textDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="27/12/23"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:gravity="end|center_vertical" />
+
+</LinearLayout>
