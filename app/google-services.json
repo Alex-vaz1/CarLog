@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "613646408789",
+    "project_id": "carlogger-6c8d3",
+    "storage_bucket": "carlogger-6c8d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613646408789:android:bca86c6de791f41e6cc8dc",
+        "android_client_info": {
+          "package_name": "com.example.carlogger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCi73svuUY-KwOox4tP_DGQo5VU_yMBYc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

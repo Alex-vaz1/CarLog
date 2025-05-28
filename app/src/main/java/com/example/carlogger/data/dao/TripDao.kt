@@ -13,9 +13,15 @@ interface TripDao {
     @Query("SELECT * FROM trips ORDER BY date DESC")
     fun getAllTrips(): Flow<List<Trip>>
 
+    @Query("SELECT * FROM trips ORDER BY date DESC LIMIT 1")
+    suspend fun getLatestTrip(): Trip?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(trip: Trip)
 
     @Query("DELETE FROM trips")
     suspend fun clearAll()
+
+    @Query("DELETE FROM trips WHERE id = :tripId")
+    suspend fun deleteById(tripId: Long)
 }

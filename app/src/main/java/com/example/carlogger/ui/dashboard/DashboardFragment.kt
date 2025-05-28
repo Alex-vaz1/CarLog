@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.carlogger.R
 import com.example.carlogger.databinding.FragmentDashboardBinding
+import com.google.android.material.textfield.TextInputEditText
 
 class DashboardFragment : Fragment() {
 
@@ -32,7 +34,7 @@ class DashboardFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+            DashboardViewModelFactory(requireActivity().application)
         ).get(DashboardViewModel::class.java)
 
         // Configurar RecyclerView
@@ -61,6 +63,24 @@ class DashboardFragment : Fragment() {
         // Toggle mode al hacer click en el Chip
         binding.chipToggle.setOnClickListener {
             viewModel.toggleMode()
+        }
+
+        // Nuevo viaje: abrir formulario
+        binding.buttonNewTrip.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_new_trip, null)
+            val userInput = dialogView.findViewById<TextInputEditText>(R.id.editUserId)
+            val odoInput  = dialogView.findViewById<TextInputEditText>(R.id.editLast3Odo)
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Nuevo viaje")
+                .setView(dialogView)
+                .setPositiveButton("Agregar") { _, _ ->
+                    val userId = userInput.text.toString().trim()
+                    val last3 = odoInput.text.toString().toIntOrNull() ?: return@setPositiveButton
+                    viewModel.insertTrip(userId, last3)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
     }
 
