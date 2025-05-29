@@ -13,10 +13,28 @@ import java.time.Instant
 
 class FirebaseTripRepository : TripRepository {
 
-    private val col = Firebase.firestore
-        .collection("trips")
+    private val col = Firebase.firestore.collection("trips")
 
+    // Usado en Dashboard (solo últimos 10 viajes)
     override fun getTrips(): Flow<List<Trip>> = callbackFlow {
+        val sub = col
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(10)
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    close(err)
+                    return@addSnapshotListener
+                }
+                val list = snap!!.documents.mapNotNull { doc ->
+                    doc.toTrip()
+                }
+                trySend(list)
+            }
+        awaitClose { sub.remove() }
+    }
+
+    // NUEVO: usado en Home (todos los viajes sin límite)
+    fun getAllTrips(): Flow<List<Trip>> = callbackFlow {
         val sub = col
             .orderBy("date", Query.Direction.DESCENDING)
             .addSnapshotListener { snap, err ->
@@ -25,24 +43,7 @@ class FirebaseTripRepository : TripRepository {
                     return@addSnapshotListener
                 }
                 val list = snap!!.documents.mapNotNull { doc ->
-                    // ID numérico
-                    val id = doc.id.toLongOrNull() ?: return@mapNotNull null
-                    // Campos básicos
-                    val userId = doc.getString("userId") ?: return@mapNotNull null
-                    val odometer = doc.getLong("odometer")?.toInt() ?: 0
-                    val distanceTraveled = doc.getLong("distanceTraveled")?.toInt() ?: 0
-                    val price = doc.getDouble("price") ?: 0.0
-                    // Fecha: convertir Timestamp → Date → Instant
-                    val ts = doc.getTimestamp("date")
-                    val date = ts?.toDate()?.toInstant() ?: Instant.now()
-                    Trip(
-                        id = id,
-                        userId = userId,
-                        odometer = odometer,
-                        distanceTraveled = distanceTraveled,
-                        price = price,
-                        date = date
-                    )
+                    doc.toTrip()
                 }
                 trySend(list)
             }
@@ -50,12 +51,12 @@ class FirebaseTripRepository : TripRepository {
     }
 
     override suspend fun addTrip(userId: String, last3Digits: Int) {
-        // Mismo cálculo que en LocalTripRepository
         val latestSnap = col
             .orderBy("date", Query.Direction.DESCENDING)
             .limit(1)
             .get()
             .await()
+
         val prevOdo = latestSnap.documents
             .firstOrNull()
             ?.getLong("odometer")
@@ -80,5 +81,24 @@ class FirebaseTripRepository : TripRepository {
 
     override suspend fun deleteTrip(id: Long) {
         col.document(id.toString()).delete().await()
+    }
+
+    // Utilidad para mapear documento a Trip
+    private fun com.google.firebase.firestore.DocumentSnapshot.toTrip(): Trip? {
+        val id = this.id.hashCode().toLong()
+        val userId = getString("userId") ?: return null
+        val odometer = getLong("odometer")?.toInt() ?: return null
+        val distanceTraveled = getLong("distanceTraveled")?.toInt() ?: return null
+        val price = getDouble("price") ?: return null
+        val date = getTimestamp("date")?.toDate()?.toInstant() ?: Instant.now()
+
+        return Trip(
+            id = id,
+            userId = userId,
+            odometer = odometer,
+            distanceTraveled = distanceTraveled,
+            price = price,
+            date = date
+        )
     }
 }

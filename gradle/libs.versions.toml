@@ -12,7 +12,7 @@ lifecycleLivedataKtx = "2.9.0"
 lifecycleViewmodelKtx = "2.9.0"
 navigationFragmentKtx = "2.9.0"
 navigationUiKtx = "2.9.0"
-
+poi = "5.2.3"
 room = "2.7.1"       # última estable de Room (Abr 23, 2025) :contentReference[oaicite:1]{index=1}
 ksp = "2.0.21-1.0.27"  # KSP alineado a Kotlin 2.0.21 :contentReference[oaicite:2]{index=2}
 
@@ -32,9 +32,13 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-room-runtime  = { group="androidx.room",   name="room-runtime", version.ref="room" }
 androidx-room-ktx      = { group="androidx.room",   name="room-ktx",     version.ref="room" }
 androidx-room-compiler = { group="androidx.room",   name="room-compiler",version.ref="room" }
+
+poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
 
 # nuevo alias para KSP
 ksp                = { id="com.google.devtools.ksp",    version.ref="ksp" }

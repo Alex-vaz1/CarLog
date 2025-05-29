@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    id("com.google.gms.google-services")
-}
+    id("com.google.gms.google-services") version "4.4.2"
+    }
+
 
 android {
     namespace = "com.example.carlogger"
@@ -64,4 +65,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
 
+    //excell
+    implementation(libs.poi.ooxml)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0") // keep only one
 }
